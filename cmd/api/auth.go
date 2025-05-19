@@ -1,7 +1,6 @@
 package api
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/UltimateForm/gopen-api/internal/authrep"
@@ -25,12 +24,7 @@ func authHandler(res http.ResponseWriter, req *http.Request) {
 	var reqData LoginDto
 	bindErr := render.Bind(req, &reqData)
 	if bindErr != nil {
-		switch bindErr := bindErr.(type) {
-		case *core.ErrorResponse:
-			render.Render(res, req, bindErr)
-		default:
-			render.Render(res, req, core.InternalServerError())
-		}
+		core.RespondError(res, req, bindErr)
 		return
 	}
 	userExists, dbError := authrep.UserExistsAtomically(
@@ -41,12 +35,11 @@ func authHandler(res http.ResponseWriter, req *http.Request) {
 		},
 	)
 	if dbError != nil {
-		log.Println(dbError.Error())
-		render.Render(res, req, core.InternalServerError())
+		core.RespondError(res, req, dbError)
 		return
 	}
 	if !userExists {
-		render.Render(res, req, core.NotFound())
+		core.RespondError(res, req, core.Unauthorized())
 		return
 	}
 	render.Status(req, 204)
