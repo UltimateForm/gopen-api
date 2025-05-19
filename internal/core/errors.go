@@ -46,6 +46,7 @@ func RespondError(res http.ResponseWriter, req *http.Request, err error) {
 	case *ErrorResponse:
 		render.Render(res, req, bindErr)
 	default:
+		log.Printf("Non HTTP error occured: %v", err)
 		render.Render(res, req, InternalServerError())
 	}
 }

@@ -5,3 +5,7 @@ type DbConfig struct {
 	Username string
 	Password string
 }
+
+type AuthConfig struct {
+	JwtSign string
+}

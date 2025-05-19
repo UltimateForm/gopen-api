@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"log"
 	"os"
 
@@ -17,4 +18,12 @@ func LoadDbConfig() DbConfig {
 		Uri:      os.Getenv("NEO4J_URI"),
 		Username: os.Getenv("NEO4J_USERNAME"),
 		Password: os.Getenv("NEO4J_PASSWORD")}
+}
+
+func LoadAuthConfig() AuthConfig {
+	jwtSign := os.Getenv("JWT_SIGN")
+	if jwtSign == "" {
+		panic(errors.New("JWT_SIGN not in environment variables"))
+	}
+	return AuthConfig{JwtSign: jwtSign}
 }
