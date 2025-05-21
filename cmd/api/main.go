@@ -14,6 +14,10 @@ func Start() http.Handler {
 	router.Use(middleware.Logger)
 	router.Use(core.ErrorHandlingMiddleware)
 	router.Post("/login", authHandler)
+	router.Route("/characters", func(r chi.Router) {
+		r.Use(core.AuthMiddleware)
+		r.Get("/", characterHandler)
+	})
 	log.Println("ROUTER CREATED")
 	return router
 }

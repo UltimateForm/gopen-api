@@ -3,6 +3,7 @@ package core
 import (
 	"log"
 	"net/http"
+	"runtime"
 
 	"github.com/go-chi/render"
 )
@@ -56,7 +57,10 @@ func ErrorHandlingMiddleware(next http.Handler) http.Handler {
 		defer func() {
 			recovered := recover()
 			if recovered != nil {
-				log.Printf("UNHANDLED ERROR %v", recovered)
+				const size = 64 << 10
+				buf := make([]byte, size)
+				buf = buf[:runtime.Stack(buf, false)]
+				log.Printf("UNHANDLED ERROR WHILE SERVING %v: %v\n%s", r.RemoteAddr, recovered, buf)
 				RespondError(w, r, InternalServerError())
 			}
 		}()
