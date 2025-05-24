@@ -1,11 +1,10 @@
 package core
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"runtime"
-
-	"github.com/go-chi/render"
 )
 
 type ErrorResponse struct {
@@ -15,11 +14,6 @@ type ErrorResponse struct {
 
 func (e *ErrorResponse) Error() string {
 	return e.Message
-}
-
-func (e *ErrorResponse) Render(res http.ResponseWriter, req *http.Request) error {
-	render.Status(req, int(e.Code))
-	return nil
 }
 
 func BadRequest(msg string) *ErrorResponse {
@@ -42,13 +36,19 @@ func Forbidden() *ErrorResponse {
 	return &ErrorResponse{Code: 403, Message: "Forbidden"}
 }
 
+func RespondKnownError(res http.ResponseWriter, err ErrorResponse) {
+	res.WriteHeader(int(err.Code))
+	json.NewEncoder(res).Encode(err)
+}
+
 func RespondError(res http.ResponseWriter, req *http.Request, err error) {
 	switch bindErr := err.(type) {
 	case *ErrorResponse:
-		render.Render(res, req, bindErr)
+		RespondKnownError(res, *bindErr)
 	default:
 		log.Printf("Non HTTP error occured: %v", err)
-		render.Render(res, req, InternalServerError())
+		RespondKnownError(res, *InternalServerError())
+
 	}
 }
 

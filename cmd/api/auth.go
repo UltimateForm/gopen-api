@@ -5,7 +5,6 @@ import (
 
 	"github.com/UltimateForm/gopen-api/internal/authrep"
 	"github.com/UltimateForm/gopen-api/internal/core"
-	"github.com/go-chi/render"
 )
 
 type LoginRequest struct {
@@ -17,11 +16,7 @@ type LoginResponse struct {
 	Token string `json:"token"`
 }
 
-func (src *LoginResponse) Render(res http.ResponseWriter, req *http.Request) error {
-	return nil
-}
-
-func (src *LoginRequest) Bind(r *http.Request) error {
+func (src *LoginRequest) Validate() error {
 	if src.Email == "" || src.Password == "" {
 		return core.BadRequest("missing either email or password field")
 	}
@@ -30,9 +25,9 @@ func (src *LoginRequest) Bind(r *http.Request) error {
 
 func authHandler(res http.ResponseWriter, req *http.Request) {
 	var reqData LoginRequest
-	bindErr := render.Bind(req, &reqData)
-	if bindErr != nil {
-		core.RespondError(res, req, bindErr)
+	bodyErr := core.ParseBody(req, &reqData)
+	if bodyErr != nil {
+		core.RespondError(res, req, bodyErr)
 		return
 	}
 	userExists, dbError := authrep.UserExistsAtomically(
@@ -55,9 +50,5 @@ func authHandler(res http.ResponseWriter, req *http.Request) {
 		core.RespondError(res, req, tokenCreationErr)
 	}
 	tokenRest := LoginResponse{Token: token}
-	// NOTE: maybe we dont need render here at all, we could just decode it
-	renderErr := render.Render(res, req, &tokenRest)
-	if renderErr != nil {
-		core.RespondError(res, req, renderErr)
-	}
+	core.RespondOk(res, tokenRest)
 }
