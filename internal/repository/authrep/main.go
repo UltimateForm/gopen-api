@@ -9,7 +9,13 @@ import (
 )
 
 func txUsrExistsAtomically(ctx context.Context, user User) neo4j.ManagedTransactionWorkT[bool] {
-	query := queryComputeUserExistsAtomically(user)
+	query := repository.NewQuery(
+		user,
+		`
+MATCH (u:User {email:$email, password:$password})
+RETURN count(u) > 0 as exists
+		`,
+	)
 
 	return func(tx neo4j.ManagedTransaction) (bool, error) {
 		res, err := query.Execute(tx, ctx)

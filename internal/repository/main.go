@@ -15,3 +15,12 @@ func ExecuteReadWithDriver[T any](ctx context.Context, tx neo4j.ManagedTransacti
 	defer session.Close(readCtx)
 	return neo4j.ExecuteRead(readCtx, session, tx)
 }
+
+func NewQuery(data IQueryParams, query string) QueryRunner {
+	return func(tx neo4j.ManagedTransaction, ctx context.Context) (neo4j.ResultWithContext, error) {
+		return tx.Run(
+			ctx,
+			query,
+			data.ToParams())
+	}
+}

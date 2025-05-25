@@ -11,3 +11,7 @@ type QueryRunner func(tx neo4j.ManagedTransaction, ctx context.Context) (neo4j.R
 func (src QueryRunner) Execute(tx neo4j.ManagedTransaction, ctx context.Context) (neo4j.ResultWithContext, error) {
 	return src(tx, ctx)
 }
+
+type IQueryParams interface {
+	ToParams() map[string]any
+}
