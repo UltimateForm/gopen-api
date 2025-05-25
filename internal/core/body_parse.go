@@ -15,7 +15,7 @@ func ParseBody(req *http.Request, data any) error {
 		return readErr
 	}
 
-	if dataAsReqBody := data.(RequestBody); dataAsReqBody != nil {
+	if dataAsReqBody, isValidate := data.(RequestBody); isValidate {
 		return dataAsReqBody.Validate()
 	}
 	return nil
