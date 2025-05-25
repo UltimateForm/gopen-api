@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
-	"github.com/UltimateForm/gopen-api/internal/authrep"
 	"github.com/UltimateForm/gopen-api/internal/core"
+	"github.com/UltimateForm/gopen-api/internal/repository/authrep"
 )
 
 type LoginRequest struct {

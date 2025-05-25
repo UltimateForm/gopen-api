@@ -7,12 +7,14 @@ import (
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
 )
 
-func init() {
-	log.Println("DB PACKAGE INIT")
-}
+var Driver neo4j.DriverWithContext
 
-func GetDriver() (neo4j.DriverWithContext, error) {
+func init() {
 	dbCfg := config.LoadDbConfig()
 	driver, driverErr := neo4j.NewDriverWithContext(dbCfg.Uri, neo4j.BasicAuth(dbCfg.Username, dbCfg.Password, ""))
-	return driver, driverErr
+	if driverErr != nil {
+		panic(driverErr)
+	}
+	Driver = driver
+	log.Println("DB PACKAGE INIT")
 }
