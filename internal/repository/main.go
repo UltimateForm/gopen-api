@@ -9,11 +9,11 @@ import (
 )
 
 func ExecuteReadWithDriver[T any](ctx context.Context, tx neo4j.ManagedTransactionWorkT[T]) (T, error) {
-	readCtx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Second*10))
-	defer cancel()
-	session := db.Driver.NewSession(readCtx, neo4j.SessionConfig{})
-	defer session.Close(readCtx)
-	return neo4j.ExecuteRead(readCtx, session, tx)
+	session := db.Driver.NewSession(ctx, neo4j.SessionConfig{})
+	defer session.Close(ctx)
+	return neo4j.ExecuteRead(ctx, session, tx, func(config *neo4j.TransactionConfig) {
+		config.Timeout = time.Second * 10
+	})
 }
 
 func NewQuery(data IQueryParams, query string) QueryRunner {

@@ -1,11 +1,18 @@
 meta {
-  name: character
+  name: characters
   type: http
   seq: 2
 }
 
 get {
   url: {{BASE_URL}}/characters
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "limit": 10,
+    "skip": 0
+  }
 }

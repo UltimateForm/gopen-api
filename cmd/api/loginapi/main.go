@@ -1,4 +1,4 @@
-package api
+package loginapi
 
 import (
 	"net/http"
@@ -16,14 +16,14 @@ type LoginResponse struct {
 	Token string `json:"token"`
 }
 
-func (src *LoginRequest) Validate() error {
+func (src LoginRequest) Validate() error {
 	if src.Email == "" || src.Password == "" {
 		return core.BadRequest("missing either email or password field")
 	}
 	return nil
 }
 
-func authHandler(res http.ResponseWriter, req *http.Request) {
+func HandlePostLogin(res http.ResponseWriter, req *http.Request) {
 	var reqData LoginRequest
 	bodyErr := core.ParseBody(req, &reqData)
 	if bodyErr != nil {
