@@ -48,6 +48,7 @@ func HandlePostLogin(res http.ResponseWriter, req *http.Request) {
 	token, tokenCreationErr := core.CreateAuthToken(reqData.Email)
 	if tokenCreationErr != nil {
 		core.RespondError(res, req, tokenCreationErr)
+		return
 	}
 	tokenRest := LoginResponse{Token: token}
 	core.RespondOk(res, tokenRest)

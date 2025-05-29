@@ -37,6 +37,7 @@ func Forbidden() *ErrorResponse {
 }
 
 func RespondKnownError(res http.ResponseWriter, err ErrorResponse) {
+	// TODO: use http.Error instead
 	res.WriteHeader(int(err.Code))
 	json.NewEncoder(res).Encode(err)
 }
