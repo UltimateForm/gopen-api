@@ -55,11 +55,11 @@ func TestParseBodyWithValidationFail(t *testing.T) {
 	if parseErr == nil {
 		t.Fatalf("Expected parseErr to not be nil but instead it is %v", parseErr)
 	}
-	badRequestErr, isErrorResponse := parseErr.(*ErrorResponse)
+	badRequestErr, isErrorResponse := parseErr.(ErrorResponse)
 	if !isErrorResponse {
 		t.Fatalf("Expected error (%v) to be of type error response but it is not", parseErr)
 	}
-	errorRes := &ErrorResponse{
+	errorRes := ErrorResponse{
 		Code:    400,
 		Message: "text is required",
 	}

@@ -12,28 +12,28 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
-func (e *ErrorResponse) Error() string {
+func (e ErrorResponse) Error() string {
 	return e.Message
 }
 
-func BadRequest(msg string) *ErrorResponse {
-	return &ErrorResponse{Code: 400, Message: msg}
+func BadRequest(msg string) ErrorResponse {
+	return ErrorResponse{Code: 400, Message: msg}
 }
 
-func InternalServerError() *ErrorResponse {
-	return &ErrorResponse{Code: 500, Message: "Internal Server Error"}
+func InternalServerError() ErrorResponse {
+	return ErrorResponse{Code: 500, Message: "Internal Server Error"}
 }
 
-func NotFound() *ErrorResponse {
-	return &ErrorResponse{Code: 404, Message: "Resource Not Found"}
+func NotFound() ErrorResponse {
+	return ErrorResponse{Code: 404, Message: "Resource Not Found"}
 }
 
-func Unauthorized() *ErrorResponse {
-	return &ErrorResponse{Code: 401, Message: "Unauthorized"}
+func Unauthorized() ErrorResponse {
+	return ErrorResponse{Code: 401, Message: "Unauthorized"}
 }
 
-func Forbidden() *ErrorResponse {
-	return &ErrorResponse{Code: 403, Message: "Forbidden"}
+func Forbidden() ErrorResponse {
+	return ErrorResponse{Code: 403, Message: "Forbidden"}
 }
 
 func RespondKnownError(res http.ResponseWriter, err ErrorResponse) {
@@ -44,11 +44,11 @@ func RespondKnownError(res http.ResponseWriter, err ErrorResponse) {
 
 func RespondError(res http.ResponseWriter, req *http.Request, err error) {
 	switch bindErr := err.(type) {
-	case *ErrorResponse:
-		RespondKnownError(res, *bindErr)
+	case ErrorResponse:
+		RespondKnownError(res, bindErr)
 	default:
 		log.Printf("Non HTTP error occured: %v", err)
-		RespondKnownError(res, *InternalServerError())
+		RespondKnownError(res, InternalServerError())
 
 	}
 }

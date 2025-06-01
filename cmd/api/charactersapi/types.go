@@ -7,6 +7,11 @@ type Character struct {
 	Debut       int    `json:"debut"`
 }
 
+type Offset struct {
+	Limit int `json:"limit"`
+	Skip  int `json:"skip"`
+}
+
 type CharacterList struct {
 	Offset
 	Characters []Character `json:"characters"`

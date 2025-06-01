@@ -6,8 +6,13 @@ meta {
 
 get {
   url: {{BASE_URL}}/characters
-  body: json
+  body: none
   auth: inherit
+}
+
+params:query {
+  ~limit: 10
+  ~skip: 0
 }
 
 body:json {
