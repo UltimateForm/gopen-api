@@ -9,7 +9,7 @@ import (
 )
 
 func txUsrExistsAtomically(ctx context.Context, user User) neo4j.ManagedTransactionWorkT[bool] {
-	query := repository.NewQuery(
+	query := repository.NewQueryWithParams(
 		user,
 		`
 MATCH (u:User {email:$email, password:$password})

@@ -16,11 +16,15 @@ func ExecuteReadWithDriver[T any](ctx context.Context, tx neo4j.ManagedTransacti
 	})
 }
 
-func NewQuery(data IQueryParams, query string) QueryRunner {
+func NewQuery(data map[string]any, query string) QueryRunner {
 	return func(tx neo4j.ManagedTransaction, ctx context.Context) (neo4j.ResultWithContext, error) {
 		return tx.Run(
 			ctx,
 			query,
-			data.ToParams())
+			data)
 	}
+}
+
+func NewQueryWithParams(data IQueryParams, query string) QueryRunner {
+	return NewQuery(data.ToParams(), query)
 }

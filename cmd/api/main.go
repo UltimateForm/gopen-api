@@ -19,6 +19,7 @@ func Start() http.Handler {
 	router.Route("/characters", func(r chi.Router) {
 		r.Use(core.AuthMiddleware)
 		r.Get("/", charactersapi.HandleGetCharacters)
+		r.Get("/{id}", charactersapi.HandleGetCharacter)
 	})
 	log.Println("ROUTER CREATED")
 	return router
