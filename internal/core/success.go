@@ -6,6 +6,7 @@ import (
 )
 
 func RespondOk(res http.ResponseWriter, data any) {
+	res.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(res).Encode(data)
 }
 
