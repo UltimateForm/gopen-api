@@ -20,6 +20,9 @@ func Start() http.Handler {
 		r.Use(core.AuthMiddleware)
 		r.Get("/", charactersapi.HandleGetCharacters)
 		r.Get("/{id}", charactersapi.HandleGetCharacter)
+		r.Post("/", charactersapi.HandleCreateCharacter)
+		r.Put("/{id}", charactersapi.HandleUpdateCharacter)
+		r.Delete("/{id}", charactersapi.HandleDeleteCharacter)
 	})
 	log.Println("ROUTER CREATED")
 	return router

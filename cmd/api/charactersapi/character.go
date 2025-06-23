@@ -20,10 +20,12 @@ func HandleGetCharacter(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	var char Character = Character{
-		Id:          character.Id,
-		Name:        character.Name,
-		Description: character.Description,
-		Debut:       character.Debut,
+		Id: character.Id,
+		CharacterInfo: CharacterInfo{
+			Name:        character.Name,
+			Description: character.Description,
+			Debut:       character.Debut,
+		},
 	}
 	core.RespondOk(res, char)
 }

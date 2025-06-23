@@ -28,10 +28,12 @@ func HandleGetCharacters(res http.ResponseWriter, req *http.Request) {
 	// NOTE: eh should i be mapping at all? golang type integrity does mean i dont need to worry so much about leakage
 	for i, char := range characters {
 		charactersMapped[i] = Character{
-			Id:          char.Id,
-			Name:        char.Name,
-			Description: char.Description,
-			Debut:       char.Debut,
+			Id: char.Id,
+			CharacterInfo: CharacterInfo{
+				Name:        char.Name,
+				Description: char.Description,
+				Debut:       char.Debut,
+			},
 		}
 	}
 	core.RespondOk(

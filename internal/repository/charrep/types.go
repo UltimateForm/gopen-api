@@ -18,3 +18,12 @@ type Character struct {
 	Description string
 	Debut       int
 }
+
+func (src Character) ToParams() map[string]any {
+	return map[string]any{
+		"id":          src.Id,
+		"name":        src.Name,
+		"description": src.Description,
+		"debut":       src.Debut,
+	}
+}

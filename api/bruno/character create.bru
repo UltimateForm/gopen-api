@@ -1,0 +1,30 @@
+meta {
+  name: character create
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{BASE_URL}}/characters
+  body: json
+  auth: inherit
+}
+
+params:query {
+  ~limit: 10
+  ~skip: 0
+}
+
+body:json {
+  {
+    "name":  "{{NAME}}",
+    "description": "{{DESCR}}",
+    "debut": {{DEBUT}}
+  }
+}
+
+vars:pre-request {
+  NAME: Cristoph Rot
+  DESCR: lorem ipsum
+  DEBUT: 1
+}
