@@ -62,16 +62,17 @@ func txReadOneCharacter(ctx context.Context, id string) neo4j.ManagedTransaction
 		`
 MATCH (character:Character {id: $id})
 RETURN character
+LIMIT 1
 	`)
 	return func(tx neo4j.ManagedTransaction) (Character, error) {
 		res, err := query.Execute(tx, ctx)
 		if err != nil {
 			return Character{}, err
 		}
-
-		record, singleErr := res.Single(ctx)
-		if singleErr != nil {
-			return Character{}, singleErr
+		var record *neo4j.Record
+		hasNext := res.NextRecord(ctx, &record)
+		if !hasNext {
+			return Character{}, repository.RepoError{Code: repository.EmptyCollectionRepoError}
 		}
 
 		return extractCharacterFromRecord(record)

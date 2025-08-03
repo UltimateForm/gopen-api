@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"runtime"
+
+	"github.com/UltimateForm/gopen-api/internal/repository"
 )
 
 type ErrorResponse struct {
@@ -42,12 +44,27 @@ func RespondKnownError(res http.ResponseWriter, err ErrorResponse) {
 	json.NewEncoder(res).Encode(err)
 }
 
+func mapRepoError(err repository.RepoError) ErrorResponse {
+	switch err.Code {
+	case repository.EmptyCollectionRepoError:
+		return NotFound()
+	case repository.ValidationError:
+		return BadRequest("Db validation error occured, if you were trying to create something it's likely it already exists")
+	case repository.UnknownRepoError:
+		fallthrough
+	default:
+		return InternalServerError()
+	}
+}
+
 func RespondError(res http.ResponseWriter, req *http.Request, err error) {
 	switch bindErr := err.(type) {
 	case ErrorResponse:
 		RespondKnownError(res, bindErr)
+	case repository.RepoError:
+		RespondKnownError(res, mapRepoError(bindErr))
 	default:
-		log.Printf("Non HTTP error occured: %v", err)
+		log.Printf("Non HTTP error of type %T occured: %v", err, err)
 		RespondKnownError(res, InternalServerError())
 
 	}
