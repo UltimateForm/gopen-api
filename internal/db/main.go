@@ -13,7 +13,7 @@ func init() {
 	dbCfg := config.LoadDbConfig()
 	driver, driverErr := neo4j.NewDriverWithContext(dbCfg.Uri, neo4j.BasicAuth(dbCfg.Username, dbCfg.Password, ""))
 	if driverErr != nil {
-		panic(driverErr)
+		log.Println(driverErr)
 	}
 	Driver = driver
 	log.Println("DB PACKAGE INIT")
