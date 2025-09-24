@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: {{BASE_URL}}/characters
+  url: {{BASE_URL}}/characters?limit=20
   body: none
   auth: inherit
 }
 
 params:query {
-  ~limit: 10
+  limit: 20
   ~skip: 0
 }
 
