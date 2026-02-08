@@ -6,3 +6,26 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    environment:
+      NEO4J_URI: localhost:7474
+      NEO4J_USERNAME: neo4j
+      NEO4J_PASSWORD: testpassword
+    # secrets:
+    #   - jwt_sign
+    #   - neo4j_password
+
+  db:
+    image: neo4j:2026.01.3-trixie
+    ports:
+      - "7474:7474"
+    environment:
+      NEO4J_AUTH: neo4j/testpassword
+      
+
+
+# secrets:
+#   jwt_sign:
+#     environment: JWT_SIGN
+#   neo4j_password:
+#     environment: NEO4J_PASSWORD
+  
