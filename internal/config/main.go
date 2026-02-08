@@ -1,7 +1,6 @@
 package config
 
 import (
-	"errors"
 	"log"
 	"os"
 
@@ -21,9 +20,9 @@ func LoadDbConfig() DbConfig {
 }
 
 func LoadAuthConfig() AuthConfig {
-	jwtSign := os.Getenv("JWT_SIGN")
-	if jwtSign == "" {
-		panic(errors.New("JWT_SIGN not in environment variables"))
+	jwtSign, err := os.ReadFile("/run/secrets/jwt_sign")
+	if err != nil {
+		panic(err)
 	}
-	return AuthConfig{JwtSign: jwtSign}
+	return AuthConfig{JwtSign: string(jwtSign)}
 }

@@ -27,3 +27,5 @@ go.work.sum
 # Misc
 .vscode/launch.json
 .vscode/settings.json
+.secrets
+.backups
