@@ -6,6 +6,7 @@ import (
 
 	"github.com/UltimateForm/gopen-api/cmd/api/charactersapi"
 	"github.com/UltimateForm/gopen-api/cmd/api/loginapi"
+	"github.com/UltimateForm/gopen-api/cmd/api/meta"
 	"github.com/UltimateForm/gopen-api/internal/core"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -24,6 +25,7 @@ func Start() http.Handler {
 		r.Put("/{id}", charactersapi.HandleUpdateCharacter)
 		r.Delete("/{id}", charactersapi.HandleDeleteCharacter)
 	})
+	router.Get("/health", meta.HandleGetHealth)
 	log.Println("ROUTER CREATED")
 	return router
 }
