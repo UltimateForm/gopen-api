@@ -22,7 +22,13 @@ func LoadDbConfig() DbConfig {
 func LoadAuthConfig() AuthConfig {
 	jwtSign, err := os.ReadFile("/run/secrets/jwt_sign")
 	if err != nil {
-		panic(err)
+		if os.IsNotExist(err) {
+			// TODO: remove this fallback secret management is set
+			// will need to change tests too
+			jwtSign = []byte(os.Getenv("JWT_SIGN"))
+		} else {
+			panic(err)
+		}
 	}
 	return AuthConfig{JwtSign: string(jwtSign)}
 }
