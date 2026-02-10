@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    app: gopen
+  name: gopen-api
+spec:
+  progressDeadlineSeconds: 30
+  replicas: 3
+  revisionHistoryLimit: 6
+  selector:
+    matchLabels:
+      app: gopen-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: gopen-api
+    spec:
+      containers:
+      - image: gopen-api:latest
+        imagePullPolicy: IfNotPresent
+        name: gopen-api
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: health
+            port: 3000
+          initialDelaySeconds: 2
+          failureThreshold: 1
+          successThreshold: 1
+      restartPolicy: Always
