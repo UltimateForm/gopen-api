@@ -1,0 +1,9 @@
+kube
+.vscode
+.secrets
+.github
+migrations
+docker
+.env
+kube
+api

@@ -6,8 +6,10 @@ build:
   artifacts:
     - image: gopen-api
       docker:
-        dockerfile: Dockerfile
+        dockerfile: ./docker/api.Dockerfile
+    - image: gopen-db-migrator
+      docker:
+        dockerfile: ./docker/migrator.Dockerfile
 manifests:
   rawYaml:
-    - kube/*
-
+    - kube/**/*.yaml
