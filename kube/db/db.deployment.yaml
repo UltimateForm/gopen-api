@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    app: gopen
+  name: gopen-db
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: gopen-db
+  template:
+    metadata:
+      labels:
+        app: gopen-db
+    spec:
+      volumes:
+        - name: gopen-data-volume
+          persistentVolumeClaim:
+            claimName: gopen-data.pvc
+      containers:
+        - image: neo4j:community-trixie
+          name: gopen-db
+          envFrom:
+            - configMapRef:
+                name: gopen-db.cfg
+          ports:
+            - containerPort: 7687
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: gopen-data-volume
+          readinessProbe:
+            exec:
+              command:
+                [
+                  "cypher-shell",
+                  "-u",
+                  "neo4j",
+                  "-p",
+                  "testpassword",
+                  "--access-mode=read",
+                  "RETURN 0",
+                ]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 60
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+      restartPolicy: Always

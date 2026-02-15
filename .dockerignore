@@ -1,0 +1,8 @@
+.git
+kube/
+api/bruno/
+LICENSE
+README.md
+# Ignore the other Dockerfile when building one
+docker/*.Dockerfile
+skaffold.yaml

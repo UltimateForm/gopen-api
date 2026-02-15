@@ -1,0 +1,8 @@
+kube
+docker
+internal
+cmd
+.backups
+.github
+.secrets
+api

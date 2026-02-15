@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gopen-db-setup
+spec:
+  template:
+    spec:
+      containers:
+        - name: setup
+          image: gopen-db-migrator
+          imagePullPolicy: IfNotPresent
+          command:
+            [
+              "cypher-shell",
+              "-a",
+              "bolt://gopen-db",
+              "-u",
+              "neo4j",
+              "-p",
+              "testpassword",
+              "-f",
+              "/migrator/migrations/setup.cypher",
+            ]
+          readinessProbe:
+            exec:
+              command:
+                [
+                  "cypher-shell",
+                  "-a",
+                  "bolt://gopen-db",
+                  "-u",
+                  "neo4j",
+                  "-p",
+                  "testpassword",
+                  "--access-mode=read",
+                  "RETURN 0",
+                ]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 60
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gopen-db-hydrate
+spec:
+  template:
+    spec:
+      containers:
+        - name: hydrate
+          image: gopen-db-migrator
+          imagePullPolicy: IfNotPresent
+          command:
+            [
+              "cypher-shell",
+              "-a",
+              "bolt://gopen-db",
+              "-u",
+              "neo4j",
+              "-p",
+              "testpassword",
+              "-f",
+              "/migrator/migrations/test_docs.cypher",
+            ]
+          readinessProbe:
+            exec:
+              command:
+                [
+                  "cypher-shell",
+                  "-a",
+                  "bolt://gopen-db",
+                  "-u",
+                  "neo4j",
+                  "-p",
+                  "testpassword",
+                  "--access-mode=read",
+                  "RETURN 0",
+                ]
+      restartPolicy: Never
+  backoffLimit: 4

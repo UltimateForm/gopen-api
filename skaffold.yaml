@@ -1,0 +1,15 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: gopen-api
+build:
+  artifacts:
+    - image: gopen-api
+      docker:
+        dockerfile: ./docker/api.Dockerfile
+    - image: gopen-db-migrator
+      docker:
+        dockerfile: ./docker/migrator.Dockerfile
+manifests:
+  rawYaml:
+    - kube/**/*.yaml

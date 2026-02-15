@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dotpen-api.cfg
+data:
+  NEO4J_URI: bolt://gopen-db
+  NEO4J_USERNAME: neo4j
+  NEO4J_PASSWORD: testpassword
+  JWT_SIGN: 74JkywUHV3tmT9Yj7r4gsH22Md5Df45n
