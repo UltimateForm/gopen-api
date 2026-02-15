@@ -27,6 +27,9 @@ spec:
       - image: gopen-api:latest
         imagePullPolicy: IfNotPresent
         name: gopen-api
+        envFrom:
+        - configMapRef:
+            name: dotpen-api.cfg
         ports:
         - containerPort: 3000
           protocol: TCP
@@ -37,4 +40,11 @@ spec:
           initialDelaySeconds: 2
           failureThreshold: 1
           successThreshold: 1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
       restartPolicy: Always

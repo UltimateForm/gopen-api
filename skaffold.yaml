@@ -1,0 +1,13 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: gopen-api
+build:
+  artifacts:
+    - image: gopen-api
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - kube/*
+

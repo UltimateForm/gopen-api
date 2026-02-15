@@ -1,0 +1,5 @@
+kube
+.vscode
+.secrets
+.github
+migrations
